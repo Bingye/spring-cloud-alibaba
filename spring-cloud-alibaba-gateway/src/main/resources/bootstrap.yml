@@ -1,0 +1,33 @@
+server: 
+  port: 80
+  servlet: 
+    context-path: /spring-cloud-alibaba-gateway
+  
+  
+spring:
+  application:
+    name: spring-cloud-alibaba-gateway
+  cloud: 
+    nacos: 
+      discovery: 
+        server-addr: localhost:8848
+    gateway: 
+      discovery: 
+        locator: 
+          enabled: true
+      routes: 
+        - id: order
+          uri: lb://spring-cloud-alibaba-order
+          predicates: 
+            - Path=/spring-cloud-alibaba-order/order/**
+            
+        - id: product
+          uri: lb://spring-cloud-alibaba-product
+          predicates: 
+            - Path=/spring-cloud-alibaba-product/product/**
+        
+        - id: baidu
+          uri: http://news.baidu.com
+          predicates:               
+            - Path=/guonei
+    

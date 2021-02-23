@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  servlet: 
+    context-path: /${spring.application.name}
+
+spring: 
+  application:
+    name: spring-cloud-alibaba-product
+  cloud: 
+    #服务配置、注册、发现
+    nacos: 
+      config: 
+        server-addr: localhost:8848
+#        namespace:  public
+        group: DEFAULT_GROUP
+        file-extension: yaml
+      discovery: 
+        server-addr: localhost:8848
+#        namespace: public
+    #服务降级、熔断、限流
+    sentinel: 
+      transport: 
+        port: 8179
+        dashboard: localhost:5555
+    #消息中心框架集成
+    stream:
+      binders:
+        custom-binder: 
+          type: rabbit
+          environment: 
+            spring: 
+              rabbitmq: 
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+                virtual-host: /bingye
+      bindings: 
+        output: 
+          binder: custom-binder
+          destination: myExchange
+          group: myQueue
+  #服务跟踪
+#  zipkin:
+#    base-url: http://localhost:9411/
+#    discovery-client-enabled: false
+#  sleuth:
+#    sampler:
+#      probability: 1.0
+#服务调用：打开feign对sentinel的支持服务
+feign:
+  sentinel:
+    enabled: true
+    
+management: 
+  endpoints: 
+    web: 
+      exposure: 
+        include: "*"

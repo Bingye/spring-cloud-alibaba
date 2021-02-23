@@ -1,0 +1,80 @@
+server:
+  port: 8080
+  servlet: 
+    context-path: /${spring.application.name}
+spring: 
+  application:
+    name: spring-cloud-alibaba-order
+  cloud:
+    #服务配置、注册、发现
+    nacos:
+      config:
+        server-addr: localhost:8848
+        group: DEFAULT_GROUP
+        file-extension: yaml
+      discovery:
+        server-addr: localhost:8848
+    sentinel:
+      transport: 
+        port: 8719
+        dashboard: localhost:5555
+      datasource: 
+        ds1: 
+          nacos: 
+            server-addr: localhost:8848
+            data-id: ${spring.application.name}-flow-rules
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+    stream: 
+      binders:
+        custom-binder:
+          type: rabbit
+          environment: 
+            spring: 
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+                virtual-host: /bingye
+      bindings: 
+        input: 
+          #指定消息中心
+          binder: custom-binder
+          #交换机
+          destination: myExchange
+          #通道
+          group: myQueue
+  #服务跟踪
+#  zipkin: 
+#    base-url: http://localhost:9411/
+#    discovery-client-enabled: false
+#  sleuth:
+#    sampler:
+#      probability: 1.0
+#打开feign对sentinel的支持  启用OpenFeign整合Sentinel的自动配置
+feign:
+  sentinel:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: FULL
+
+#ribbon:
+#  ConnectTimeout: 20000 #毫秒
+#  ReadTimeout: 20000  #毫秒
+
+logging: 
+  level: 
+    #设置feign service的日志级别
+    com.bingye.order.service.IProductService: info
+
+management: 
+  endpoints: 
+    web: 
+      exposure: 
+        include: "*"

@@ -4,18 +4,16 @@
 * All right reserved.
 *
 */
-package com.bingye.order.service.fallback;
-
-import org.springframework.stereotype.Component;
+package com.bingye.feign.service.fallback;
 
 import com.alibaba.csp.sentinel.slots.block.authority.AuthorityException;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
-import com.bingye.order.service.IProductService;
-
+import com.bingye.feign.service.IProductService;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
 * @desc: 服务熔断工厂类
@@ -26,8 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 */
 @Slf4j
 @Component
-public class ProductServiceFallbackFactory implements FallbackFactory<IProductService>{
-
+public class ProductServiceFallbackFactory implements FallbackFactory<IProductService> {
 	/*
 	*(non-Javadoc)
 	* @see feign.hystrix.FallbackFactory#create(java.lang.Throwable)

@@ -3,8 +3,7 @@ server:
   servlet: 
     context-path: /spring-cloud-alibaba-gateway
   
-  
-spring:
+spring: 
   application:
     name: spring-cloud-alibaba-gateway
   cloud: 

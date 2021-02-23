@@ -1,8 +1,8 @@
 server:
   port: 8080
-  servlet: 
+  servlet:
     context-path: /${spring.application.name}
-spring: 
+spring:
   application:
     name: spring-cloud-alibaba-order
   cloud:
@@ -15,31 +15,31 @@ spring:
       discovery:
         server-addr: localhost:8848
     sentinel:
-      transport: 
+      transport:
         port: 8719
         dashboard: localhost:5555
-      datasource: 
-        ds1: 
-          nacos: 
+      datasource:
+        ds1:
+          nacos:
             server-addr: localhost:8848
             data-id: ${spring.application.name}-flow-rules
             group-id: DEFAULT_GROUP
             data-type: json
             rule-type: flow
-    stream: 
+    stream:
       binders:
         custom-binder:
           type: rabbit
-          environment: 
-            spring: 
+          environment:
+            spring:
               rabbitmq:
                 host: localhost
                 port: 5672
                 username: guest
                 password: guest
                 virtual-host: /bingye
-      bindings: 
-        input: 
+      bindings:
+        input:
           #指定消息中心
           binder: custom-binder
           #交换机
@@ -47,34 +47,33 @@ spring:
           #通道
           group: myQueue
   #服务跟踪
-#  zipkin: 
+#  zipkin:
 #    base-url: http://localhost:9411/
 #    discovery-client-enabled: false
 #  sleuth:
 #    sampler:
 #      probability: 1.0
-#打开feign对sentinel的支持  启用OpenFeign整合Sentinel的自动配置
+
 feign:
   sentinel:
+    #服务调用：打开feign对sentinel的支持服务
     enabled: true
   client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: FULL
-
-#ribbon:
-#  ConnectTimeout: 20000 #毫秒
-#  ReadTimeout: 20000  #毫秒
-
+    config: 
+      #全局设置feign日志配置和超时时间
+      default: 
+        read-timeout: 20000
+        connect-timeout: 20000
+        logger-level: full
+       
 logging: 
-  level: 
-    #设置feign service的日志级别
-    com.bingye.order.service.IProductService: info
+  level:
+    #设置feign service的日志级别 ，设置info级别不起作用
+    com.bingye.feign: debug
+    com.alibaba.nacos.client: warn
 
-management: 
-  endpoints: 
-    web: 
-      exposure: 
+management:
+  endpoints:
+    web:
+      exposure:
         include: "*"

@@ -6,6 +6,8 @@
 */
 package com.bingye.product.web;
 
+import com.bingye.feign.service.IOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.messaging.Source;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 
+import javax.annotation.Resource;
+
 /**
 * @desc: spring-cloud-alibaba-product
 * @author: bingye
@@ -26,6 +30,7 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 * @history:
 * @version: v1.0
 */
+@Slf4j
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -35,6 +40,9 @@ public class ProductController {
 	
 	@Autowired
 	private Source source;
+
+	@Autowired
+	public IOrderService orderService;
 
 	/**
 	* spring cloud openfeign 
@@ -68,6 +76,15 @@ public class ProductController {
 		Message<byte[]> message = MessageBuilder.withPayload(pid.getBytes()).build();
 		source.output().send(message);
 		return "产品减少成功："+pid;
-		
+	}
+
+	/**
+	 * 获取订单信息
+	 * @param oid
+	 * @return
+	 */
+	@GetMapping("/order/get/{oid}")
+	public String getOrderById(@PathVariable("oid") String oid){
+		return orderService.getOrderById(oid);
 	}
 }

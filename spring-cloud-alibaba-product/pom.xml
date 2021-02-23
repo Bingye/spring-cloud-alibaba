@@ -69,5 +69,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+
+		<!-- 引入feign api公共包 -->
+		<dependency>
+			<groupId>com.bingye</groupId>
+			<artifactId>spring-cloud-alibaba-feign-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

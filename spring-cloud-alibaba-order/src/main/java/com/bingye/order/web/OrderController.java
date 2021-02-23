@@ -6,8 +6,9 @@
 */
 package com.bingye.order.web;
 
-import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.bingye.order.service.IProductService;
+import com.bingye.feign.service.IProductService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,9 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-	
-	@Resource
-	private IProductService productService;
+
+	@Autowired
+	public IProductService productService;
 
 	/**
 	* 获取商品
@@ -48,7 +49,7 @@ public class OrderController {
 	public String getProductById(@PathVariable("pid") String pid) {
 		return productService.getProductById(pid);
 	}
-	
+
 //	public String getProductById_BlockHandler(String pid,BlockException ex) {
 //		return "getProductById_BlockHandler："+pid;
 //	}
@@ -88,4 +89,17 @@ public class OrderController {
     public void processMyMessage(String message) {
         log.info("接收到消息：" + message);
     }
+
+	/**
+	 * 获取订单信息
+	 */
+	@GetMapping("/get/{oid}")
+    public String getOrderById(@PathVariable("oid") String oid){
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return "成功：oid"+ oid;
+	}
 }
